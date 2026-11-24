@@ -6,12 +6,6 @@
 
 #define LOCTEXT_NAMESPACE "ReanSettings"
 
-UReanSettings::UReanSettings()
-{
-	CategoryName = TEXT("Plugins");
-	SectionName = TEXT("REAN SDK");
-}
-
 FString UReanSettings::ValidateClientId() const
 {
 	const FString Id = ClientId.TrimStartAndEnd();

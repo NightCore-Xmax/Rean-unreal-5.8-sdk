@@ -21,7 +21,9 @@ class REANSDK_API UReanSettings : public UDeveloperSettings
 	GENERATED_BODY()
 
 public:
-	UReanSettings();
+	/** Project Settings > Plugins > REAN SDK. */
+	virtual FName GetCategoryName() const override { return TEXT("Plugins"); }
+	virtual FName GetSectionName() const override { return TEXT("REAN SDK"); }
 
 	/** Your app's client id: rean_ followed by 24 lowercase letters or digits. */
 	UPROPERTY(Config, EditAnywhere, Category = "REAN")
