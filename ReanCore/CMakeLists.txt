@@ -17,7 +17,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(REAN_CORE_TESTS "Build the ReanCore tests" ON)
 option(REAN_CORE_SANITIZE "Build with AddressSanitizer and UndefinedBehaviorSanitizer (gcc/clang)" OFF)
-option(REAN_CORE_E2E "Build the end-to-end test client (POSIX sockets)" ON)
+option(REAN_CORE_TOOLS "Build rean_device_check (needs libcurl)" ON)
 
 set(REAN_CORE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../ReanSDK/Source/ReanCore")
 
@@ -79,17 +79,17 @@ if(REAN_CORE_TESTS)
     target_link_options(rean_core_tests PRIVATE -fsanitize=address,undefined)
   endif()
   add_test(NAME rean_core_tests COMMAND rean_core_tests)
+endif()
 
-  if(REAN_CORE_E2E AND NOT WIN32)
-    # Talks plain HTTP to tests/e2e/server.mjs, which serves the real REAN API
-    # handlers. Run with tests/e2e/run.sh (needs Node 18+ and a ReanClient checkout).
-    add_executable(rean_core_e2e tests/e2e/e2e_main.cpp tests/e2e/socket_transport.cpp)
-    target_link_libraries(rean_core_e2e PRIVATE rean_core)
-    target_include_directories(rean_core_e2e PRIVATE tests)
-    target_compile_options(rean_core_e2e PRIVATE ${REAN_WARNINGS})
-    if(REAN_CORE_SANITIZE)
-      target_compile_options(rean_core_e2e PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all)
-      target_link_options(rean_core_e2e PRIVATE -fsanitize=address,undefined)
-    endif()
+if(REAN_CORE_TOOLS)
+  find_package(CURL QUIET)
+  if(CURL_FOUND)
+    # Device sign-in against the real API (or any REAN-compatible base URL).
+    add_executable(rean_device_check tools/rean_device_check.cpp tools/curl_transport.cpp)
+    target_link_libraries(rean_device_check PRIVATE rean_core CURL::libcurl)
+    target_compile_options(rean_device_check PRIVATE ${REAN_WARNINGS})
+    target_compile_definitions(rean_device_check PRIVATE ${REAN_DEFINES})
+  else()
+    message(STATUS "libcurl not found: rean_device_check is not built")
   endif()
 endif()
