@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.8",
+	"Category": "Samples",
+	"Description": "REAN SDK sample: sign in, friends with presence, rich presence, invites.",
+	"Modules": [
+		{
+			"Name": "ReanSample",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ReanSDK",
+			"Enabled": true
+		}
+	],
+	"AdditionalPluginDirectories": [
+		"../../"
+	]
+}

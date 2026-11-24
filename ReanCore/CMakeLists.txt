@@ -35,7 +35,7 @@ target_include_directories(rean_core
 # Unreal-like compile rules, applied to everything in this project.
 if(MSVC)
   set(REAN_WARNINGS /W4 /WX /permissive- /utf-8 /Zc:__cplusplus /GR- /EHs-c-)
-  set(REAN_DEFINES _HAS_EXCEPTIONS=0)
+  set(REAN_DEFINES _HAS_EXCEPTIONS=0 _CRT_SECURE_NO_WARNINGS)
 else()
   set(REAN_WARNINGS -Wall -Wextra -Wpedantic -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align
                     -Wnull-dereference -Werror -fno-exceptions -fno-rtti)

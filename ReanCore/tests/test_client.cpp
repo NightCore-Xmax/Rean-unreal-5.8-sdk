@@ -513,7 +513,6 @@ TEST_CASE("presence: validation, body, heartbeat every 60 s, clear")
 
 	A.details = std::string(129, 'x');
 	CHECK(H->SetActivity(A).code == ErrorCode::InvalidArgument);
-	A.details = std::string(64, '\xF0') ;  // invalid UTF-8 counts per lead byte; still <= 128 units
 	A.details = "Ranked";
 	A.partySize = 6;
 	A.partyMax = 5;
@@ -701,8 +700,8 @@ TEST_CASE("invites: send, errors from the Social API, respond")
 	Harness H;
 	H.SignIn();
 	rean::Error Err;
-	rean::SentInvite Sent;
-	auto Cb = [&](const rean::Error& E, const rean::SentInvite& S) { Err = E; Sent = S; };
+	rean::SentInvite SentResult;
+	auto Cb = [&](const rean::Error& E, const rean::SentInvite& S) { Err = E; SentResult = S; };
 	H->SendInvite("bob", "lobby", "hi", Cb);
 	H.Tick();
 	CHECK(Err.code == ErrorCode::InvalidArgument);
@@ -725,7 +724,7 @@ TEST_CASE("invites: send, errors from the Social API, respond")
 	H.transport->Answer("v1/invites", 200, R"({"invite":{"id":"c51e0000-0000-4000-8000-000000000001","to":"22222222-2222-4222-8222-222222222222","expiresAt":"2026-11-24T00:10:00Z"}})");
 	H.Tick();
 	CHECK(Err.Ok());
-	CHECK(Sent.id == "c51e0000-0000-4000-8000-000000000001");
+	CHECK(SentResult.id == "c51e0000-0000-4000-8000-000000000001");
 
 	H->SendInvite(Bob, "", "", Cb);
 	CHECK_FALSE(H.transport->Last("v1/invites")->JsonBody().Has("joinSecret"));

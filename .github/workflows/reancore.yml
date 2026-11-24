@@ -1,0 +1,84 @@
+# Builds and tests ReanCore (the engine-independent part of the plugin) on
+# Windows, Linux and macOS. The Unreal modules need Unreal Engine and are not
+# built here.
+name: ReanCore
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: windows-msvc-cxx17, os: windows-latest, cmake: "-DCMAKE_CXX_STANDARD=17" }
+          - { name: windows-msvc-cxx20, os: windows-latest, cmake: "-DCMAKE_CXX_STANDARD=20" }
+          - { name: linux-gcc-cxx17, os: ubuntu-latest, cmake: "-DCMAKE_CXX_COMPILER=g++ -DCMAKE_CXX_STANDARD=17" }
+          - { name: linux-clang-cxx20, os: ubuntu-latest, cmake: "-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_STANDARD=20" }
+          - { name: linux-gcc-asan-ubsan, os: ubuntu-latest, cmake: "-DCMAKE_CXX_COMPILER=g++ -DREAN_CORE_SANITIZE=ON" }
+          - { name: macos-clang-cxx20, os: macos-latest, cmake: "-DCMAKE_CXX_STANDARD=20" }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: cmake -S ReanCore -B build -DCMAKE_BUILD_TYPE=Debug -DREAN_CORE_TOOLS=OFF ${{ matrix.cmake }}
+      - name: Build
+        run: cmake --build build --config Debug --parallel
+      - name: Test
+        run: ctest --test-dir build -C Debug --output-on-failure
+
+  qr-decode:
+    name: QR codes decode with independent decoders
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build and write QR codes
+        run: |
+          cmake -S ReanCore -B build -DCMAKE_BUILD_TYPE=Release -DREAN_CORE_TOOLS=OFF
+          cmake --build build --parallel
+          mkdir -p qr
+          REAN_QR_DUMP=qr ./build/rean_core_tests
+      - name: Decode
+        run: |
+          pip install zxing-cpp opencv-python-headless numpy
+          python ReanCore/tests/qr_decode_check.py qr
+
+  device-check-tool:
+    name: rean_device_check builds (libcurl)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install libcurl
+        run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev
+      - name: Build
+        run: |
+          cmake -S ReanCore -B build -DCMAKE_BUILD_TYPE=Release -DREAN_CORE_TESTS=OFF
+          cmake --build build --parallel --target rean_device_check
+      - name: Refuses to run without a client id
+        run: |
+          set +e
+          ./build/rean_device_check
+          test $? -eq 2
+
+  no-secrets:
+    name: No real client ids or tokens in the tree
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan
+        run: |
+          # Only the documentation placeholder and obviously fake test ids may appear.
+          found=$(grep -rhoE "rean_[a-z0-9]{24}" --exclude-dir=.git . | sort -u \
+            | grep -vE "^rean_(x{24}|0123456789abcdefghijklmn|test0{19}1|other0{18}1|someoneelse0{13}|unrealsdk0{15}1)$" || true)
+          if [ -n "$found" ]; then echo "Unexpected client ids:"; echo "$found"; exit 1; fi
+          if grep -rnE "(rrt|rlc|rac|rdc|rsec)_[A-Za-z0-9_-]{30,}" --exclude-dir=.git .; then echo "Something that looks like a real token"; exit 1; fi

@@ -45,10 +45,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "REAN|Sign In", meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", DisplayName = "Sign In With Launcher"))
 	static UReanSignInWithLauncherAction* SignInWithLauncher(UObject* WorldContextObject);
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSignInPin OnSuccess;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSignInPin OnFailure;
 
 	virtual void Activate() override;
@@ -65,14 +65,14 @@ public:
 	static UReanSignInWithDeviceAction* SignInWithDevice(UObject* WorldContextObject);
 
 	/** Show Code.UserCode and Code.VerificationUri (and the QR code texture). */
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanDeviceCodePin OnCode;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSignInPin OnSuccess;
 
 	/** Denied (the player declined), Expired (offer to start again), Cancelled, Network, ... */
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSignInPin OnFailure;
 
 	virtual void Activate() override;
@@ -93,10 +93,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "REAN|Sign In", meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", DisplayName = "Restore Session"))
 	static UReanRestoreSessionAction* RestoreSession(UObject* WorldContextObject);
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSignInPin OnSuccess;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSignInPin OnFailure;
 
 	virtual void Activate() override;
@@ -112,10 +112,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "REAN|Sign In", meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", DisplayName = "Sign In With Browser"))
 	static UReanSignInWithBrowserAction* SignInWithBrowser(UObject* WorldContextObject);
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSignInPin OnSuccess;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSignInPin OnFailure;
 
 	virtual void Activate() override;
@@ -131,10 +131,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "REAN|Friends", meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", DisplayName = "Get Friends"))
 	static UReanGetFriendsAction* GetFriends(UObject* WorldContextObject);
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanFriendsPin OnSuccess;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanFriendsPin OnFailure;
 
 	virtual void Activate() override;
@@ -150,10 +150,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "REAN|Presence", meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", DisplayName = "Get Presence"))
 	static UReanGetPresenceAction* GetPresence(UObject* WorldContextObject, const TArray<FString>& PlayerIds);
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanPresencePin OnSuccess;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanPresencePin OnFailure;
 
 	virtual void Activate() override;
@@ -172,10 +172,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "REAN|Invites", meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", DisplayName = "Get Invites"))
 	static UReanGetInvitesAction* GetInvites(UObject* WorldContextObject);
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanInvitesPin OnSuccess;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanInvitesPin OnFailure;
 
 	virtual void Activate() override;
@@ -191,11 +191,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "REAN|Invites", meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", DisplayName = "Send Invite"))
 	static UReanSendInviteAction* SendInvite(UObject* WorldContextObject, const FString& FriendId, const FString& JoinSecret, const FString& Message);
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSentInvitePin OnSuccess;
 
 	/** NotFriends, RateLimited (30 per 10 minutes), MissingScope, ... */
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanSentInvitePin OnFailure;
 
 	virtual void Activate() override;
@@ -216,10 +216,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "REAN|Invites", meta = (BlueprintInternalUseOnly = "true", WorldContext = "WorldContextObject", DisplayName = "Respond To Invite"))
 	static UReanRespondToInviteAction* RespondToInvite(UObject* WorldContextObject, const FString& InviteId, bool bAccept);
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanJoinPin OnSuccess;
 
-	UPROPERTY(BlueprintAssignable)
+	UPROPERTY(BlueprintAssignable, Category = "REAN")
 	FReanJoinPin OnFailure;
 
 	virtual void Activate() override;

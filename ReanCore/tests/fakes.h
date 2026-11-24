@@ -155,7 +155,7 @@ struct Harness
 	std::shared_ptr<FakeTransport> transport = std::make_shared<FakeTransport>();
 	std::shared_ptr<rean::MemoryStore> store = std::make_shared<rean::MemoryStore>();
 	int64_t monotonic = 5000000;
-	int64_t unix = StartUnixMs;
+	int64_t wallClock = StartUnixMs;
 	std::vector<std::string> logs;
 	std::unique_ptr<rean::Client> client;
 
@@ -167,7 +167,7 @@ struct Harness
 		C.transport = transport;
 		C.store = store;
 		C.monotonicMs = [this]() { return monotonic; };
-		C.unixMs = [this]() { return unix; };
+		C.unixMs = [this]() { return wallClock; };
 		C.log = [this](rean::LogLevel, const std::string& M) { logs.push_back(M); };
 		client.reset(new rean::Client(std::move(C)));
 	}
@@ -181,7 +181,7 @@ struct Harness
 	void Advance(int64_t Ms)
 	{
 		monotonic += Ms;
-		unix += Ms;
+		wallClock += Ms;
 		Tick();
 	}
 	std::string SessionKey() const { return std::string("rean.session.") + ClientId; }

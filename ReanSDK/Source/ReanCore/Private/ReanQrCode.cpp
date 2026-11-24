@@ -161,7 +161,7 @@ bool QrCode::Encode(const std::string& Utf8, Ecc Level, QrCode& Out)
 	{
 		const long Capacity = static_cast<long>(NumDataCodewords(Ver, Level)) * 8;
 		const long Used = 4 + ByteModeCountBits(Ver) + static_cast<long>(Utf8.size()) * 8;
-		if (Utf8.size() < (1u << ByteModeCountBits(Ver)) && Used <= Capacity) break;
+		if (Utf8.size() < (static_cast<size_t>(1) << ByteModeCountBits(Ver)) && Used <= Capacity) break;
 	}
 	if (Ver > 40) return false;
 
