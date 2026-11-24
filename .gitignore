@@ -1,0 +1,51 @@
+# Unreal Engine
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+Build/
+.vs/
+.vscode/
+.idea/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+*.xcworkspace
+*.xcodeproj
+*.code-workspace
+compile_commands.json
+*.pdb
+*.dll
+*.so
+*.dylib
+*.exe
+*.lib
+*.a
+*.o
+*.obj
+
+# CMake builds of ReanCore
+/build*/
+/ReanCore/build*/
+CMakeUserPresets.json
+CMakeCache.txt
+CMakeFiles/
+
+# Local configuration: client ids, test accounts, tokens. Never commit these.
+.env
+.env.*
+*.local.ini
+ReanSDK.local.ini
+rean-test.local.json
+
+# Python / Node helpers
+__pycache__/
+*.pyc
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
