@@ -1,0 +1,33 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0-preview",
+	"FriendlyName": "REAN SDK",
+	"Description": "Sign in with REAN ID (device code, REAN Launcher, browser) and the REAN Social API: friends, presence, rich presence and game invites. Preview: not yet compiled in UE 5.8.",
+	"Category": "Online Platform",
+	"CreatedBy": "REAN Studios",
+	"CreatedByURL": "https://devellopers-reanstudios-com.vercel.app",
+	"DocsURL": "https://devellopers-reanstudios-com.vercel.app/docs/sdk/unreal",
+	"SupportURL": "https://devellopers-reanstudios-com.vercel.app/docs/support",
+	"EngineVersion": "5.8.0",
+	"CanContainContent": false,
+	"IsBetaVersion": true,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "ReanCore",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "ReanSDK",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "ReanSDKEditor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
+		}
+	]
+}
