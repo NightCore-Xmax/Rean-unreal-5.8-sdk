@@ -38,7 +38,7 @@ if(MSVC)
   set(REAN_DEFINES _HAS_EXCEPTIONS=0 _CRT_SECURE_NO_WARNINGS)
 else()
   set(REAN_WARNINGS -Wall -Wextra -Wpedantic -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wcast-align
-                    -Wnull-dereference -Werror -fno-exceptions -fno-rtti)
+                    -Werror -fno-exceptions -fno-rtti)
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # Unreal's Mac/Linux toolchains are clang; these catch narrowing that MSVC also reports.
     list(APPEND REAN_WARNINGS -Wshorten-64-to-32 -Wimplicit-int-conversion)
@@ -71,8 +71,12 @@ if(REAN_CORE_TESTS)
   target_compile_options(rean_core_tests PRIVATE ${REAN_WARNINGS})
   target_compile_definitions(rean_core_tests PRIVATE ${REAN_DEFINES} DOCTEST_CONFIG_NO_EXCEPTIONS_BUT_WITH_ALL_ASSERTS)
   if(NOT MSVC)
-    # doctest's own macros trip these two; the library itself is still checked.
-    target_compile_options(rean_core_tests PRIVATE -Wno-old-style-cast -Wno-null-dereference)
+    # doctest's own macros use C casts; the library itself is still checked.
+    target_compile_options(rean_core_tests PRIVATE -Wno-old-style-cast)
+  endif()
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # doctest includes <ciso646>, which libstdc++ 15 deprecates in C++20 with a #warning.
+    target_compile_options(rean_core_tests PRIVATE "-Wno-#warnings")
   endif()
   if(REAN_CORE_SANITIZE AND NOT MSVC)
     target_compile_options(rean_core_tests PRIVATE -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=all)

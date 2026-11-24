@@ -26,7 +26,7 @@ jobs:
           - { name: linux-gcc-asan-ubsan, os: ubuntu-latest, cmake: "-DCMAKE_CXX_COMPILER=g++ -DREAN_CORE_SANITIZE=ON" }
           - { name: macos-clang-cxx20, os: macos-latest, cmake: "-DCMAKE_CXX_STANDARD=20" }
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Configure
         run: cmake -S ReanCore -B build -DCMAKE_BUILD_TYPE=Debug -DREAN_CORE_TOOLS=OFF ${{ matrix.cmake }}
       - name: Build
@@ -38,8 +38,8 @@ jobs:
     name: QR codes decode with independent decoders
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Build and write QR codes
@@ -57,7 +57,7 @@ jobs:
     name: rean_device_check builds (libcurl)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install libcurl
         run: sudo apt-get update && sudo apt-get install -y libcurl4-openssl-dev
       - name: Build
@@ -74,7 +74,7 @@ jobs:
     name: No real client ids or tokens in the tree
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Scan
         run: |
           # Only the documentation placeholder and obviously fake test ids may appear.
